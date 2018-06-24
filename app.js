@@ -1,17 +1,17 @@
 var express = require("express"),
 	app = express(),
 	bodyParser = require("body-parser"),
+	methodOverride = require("method-override"),
 	mongoose = require("mongoose");
 
 mongoose.connect("mongodb://localhost/blog_app");
 
 // APP CONFIG
-
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(methodOverride("_method"));
 
 // MONGOOSE/MODEL CONFIG
-
 var blogSchema = new mongoose.Schema({
 	title: String,
 	image: String,
@@ -22,7 +22,6 @@ var blogSchema = new mongoose.Schema({
 var Blog = mongoose.model("Blog", blogSchema)
 
 // RESTFUL ROUTES
-
 app.get("/", function(req,res){
 	res.redirect("/blogs");
 });
@@ -65,6 +64,25 @@ app.get("/blogs/:id", function(req,res){
 		else{
 			res.render("show.ejs", {blog: foundBlog});
 		}
+	})
+});
+
+// EDIT ROUTE
+app.get("/blogs/:id/edit", function(req,res){
+	Blog.findById(req.params.id, function(err,foundBlog){
+		if(err){
+			res.redirect("/blogs");
+		}
+		else{
+			res.render("edit.ejs",{item: foundBlog});
+		}
+	})
+});
+
+// UPDATE ROUTE
+app.put("/blogs/:id", function(req,res){
+	Blog.findByIdAndUpdate(req.params.id, req.body.blog, function(err,foundBlog){
+		res.redirect("/blogs");
 	})
 });
 
