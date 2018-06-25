@@ -1,15 +1,30 @@
 <% include partials/header.ejs %>
 
-<h1>Index</h1>
-
-<% blogs.forEach(function(item){ %>
-	<div>
-		<h2><%= item.title %></h2>
-		<img src="<%= item.image %>">
-		<span><%= item.created.toDateString() %></span>
-		<p><%- item.body.substring(0,100) %>...</p>
-		<a href="/blogs/<%= item._id %>">Read More</a>
+<div class="ui main text container">
+	<div class="ui huge header">Blog App</div>
+	<div class="ui top  attached segment">
+		<div class="ui divided items">
+			<% blogs.forEach(function(item){ %>
+				<div class="item">
+					<div class="image">
+						<img src="<%= item.image %>">
+					</div>
+					<div class="content">
+						<a class="header" href="/blogs/<%= item._id %>"><%= item.title %></a>
+						<div class="meta">
+							<span><%= item.created.toDateString() %></span>
+						</div>
+						<div class="description">
+							<p><%- item.body.substring(0,100) %>...</p>
+						</div>
+						<div class="extra">
+							<a class="ui basic violet button floated" href="/blogs/<%= item._id %>">Read More<i class="right chevron icon"></i></a>
+						</div>
+					</div>
+				</div>
+			<% }) %>
+		</div>
 	</div>
-<% }) %>
+</div>
 
-<% include partials/header.ejs %>
+<% include partials/footer.ejs %>
